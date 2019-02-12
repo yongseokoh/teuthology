@@ -122,6 +122,14 @@ class CephAnsible(Task):
         self.extra_vars_file = self._write_hosts_file(prefix='teuth_ansible_gvar',
                                                       content=gvar)
 
+    def start_firewalld(self):
+        # fixes timeouts during ansible run
+        for remote, roles in self.each_cluster.remotes.iteritems():
+            cmd = 'sudo service firewalld start'
+            remote.run(
+                args=cmd, stdout=StringIO(),
+            )
+
     def execute_playbook(self):
         """
         Execute ansible-playbook
@@ -522,6 +530,7 @@ class CephAnsible(Task):
         ])
         self._copy_and_print_config()
         self._generate_client_config()
+        self.start_firewalld()
         str_args = ' '.join(args)
         ceph_installer.run(
             args=[
