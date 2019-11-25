@@ -3,8 +3,9 @@ import re
 import requests
 import socket
 import time
-import urllib
 import yaml
+
+from teuthology.util.compat import urlencode
 
 from copy import deepcopy
 from libcloud.common.exceptions import RateLimitReachedError, BaseHTTPError
@@ -15,8 +16,8 @@ from paramiko.ssh_exception import NoValidConnectionsError
 from teuthology.config import config
 from teuthology.contextutil import safe_while
 
-import base
-import util
+from teuthology.provision.cloud import base
+from teuthology.provision.cloud import util
 from teuthology.provision.cloud.base import Provider
 
 
@@ -289,7 +290,7 @@ class OpenStackProvisioner(base.Provisioner):
                 log.exception("Could not destroy volume %s", vol)
 
     def _update_dns(self):
-        query = urllib.urlencode(dict(
+        query = urlencode(dict(
             name=self.name,
             ip=self.ips[0],
         ))

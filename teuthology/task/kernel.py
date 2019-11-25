@@ -7,7 +7,8 @@ import logging
 import os
 import re
 import shlex
-import urlparse
+
+from teuthology.util.compat import urljoin
 
 from teuthology import misc as teuthology
 from teuthology.parallel import parallel
@@ -76,8 +77,8 @@ def normalize_config(ctx, config):
     :param config: Configuration
     """
     if not config or \
-            len(filter(lambda x: x in VERSION_KEYS + ['kdb', 'flavor'],
-                       config.keys())) == len(config.keys()):
+            len([x for x in config.keys() if x in
+                VERSION_KEYS + ['kdb', 'flavor']]) == len(config.keys()):
         new_config = {}
         if not config:
             config = CONFIG_DEFAULT
@@ -360,7 +361,7 @@ def download_kernel(ctx, config):
             if teuth_config.use_shaman:
                 if role_remote.os.package_type == 'rpm':
                     arch = builder.arch
-                    baseurl = urlparse.urljoin(
+                    baseurl = urljoin(
                         builder.base_url,
                         '/'.join([arch, ''])
                     )
@@ -370,7 +371,7 @@ def download_kernel(ctx, config):
                     )
                 elif role_remote.os.package_type == 'deb':
                     arch = 'amd64'  # FIXME
-                    baseurl = urlparse.urljoin(
+                    baseurl = urljoin(
                         builder.base_url,
                         '/'.join([
                             'pool', 'main', 'l',

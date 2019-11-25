@@ -2,7 +2,6 @@
 Miscellaneous teuthology functions.
 Used by other modules, but mostly called from tasks.
 """
-
 import argparse
 import os
 import logging
@@ -13,13 +12,11 @@ import subprocess
 import sys
 import tarfile
 import time
-import urllib2
-import urlparse
 import yaml
 import json
 import re
 import pprint
-
+from teuthology.util.compat import urljoin, urlopen, HTTPError
 
 from netaddr.strategy.ipv4 import valid_str as _is_ipv4
 from netaddr.strategy.ipv6 import valid_str as _is_ipv6
@@ -31,6 +28,8 @@ from teuthology.orchestra import run
 from teuthology.config import config
 from teuthology.contextutil import safe_while
 from teuthology.orchestra.opsys import DEFAULT_OS_VERSION
+
+from six import reraise
 
 log = logging.getLogger(__name__)
 
@@ -232,19 +231,19 @@ def get_ceph_binary_url(package=None,
                 branch = 'master'
             ref = branch
 
-        sha1_url = urlparse.urljoin(BASE, 'ref/{ref}/sha1'.format(ref=ref))
+        sha1_url = urljoin(BASE, 'ref/{ref}/sha1'.format(ref=ref))
         log.debug('Translating ref to sha1 using url %s', sha1_url)
 
         try:
-            sha1_fp = urllib2.urlopen(sha1_url)
+            sha1_fp = urlopen(sha1_url)
             sha1 = sha1_fp.read().rstrip('\n')
             sha1_fp.close()
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             log.error('Failed to get url %s', sha1_url)
             raise e
 
     log.debug('Using %s %s sha1 %s', package, format, sha1)
-    bindir_url = urlparse.urljoin(BASE, 'sha1/{sha1}/'.format(sha1=sha1))
+    bindir_url = urljoin(BASE, 'sha1/{sha1}/'.format(sha1=sha1))
     return (sha1, bindir_url)
 
 
@@ -1177,7 +1176,7 @@ def stop_daemons_of_type(ctx, type_, cluster='ceph'):
             exc_info = sys.exc_info()
             log.exception('Saw exception from %s.%s', daemon.role, daemon.id_)
     if exc_info != (None, None, None):
-        raise exc_info[0], exc_info[1], exc_info[2]
+        reraise(*exc_info)
 
 
 def get_system_type(remote, distro=False, version=False):
