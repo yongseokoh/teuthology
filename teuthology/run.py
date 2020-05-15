@@ -231,10 +231,6 @@ def get_initial_tasks(lock, config, machine_type):
             {'selinux': None},
         ])
 
-    if 'redhat' in config:
-        init_tasks.extend([
-            {'internal.setup_stage_cdn': None}])
-
     if config.get('ceph_cm_ansible', True):
         init_tasks.append({'ansible.cephlab': None})
 
@@ -245,9 +241,7 @@ def get_initial_tasks(lock, config, machine_type):
     if 'redhat' in config:
         init_tasks.extend([
             {'internal.git_ignore_ssl': None},
-            {'internal.setup_cdn_repo': None},
-            {'internal.setup_base_repo': None},
-            {'internal.setup_additional_repo': None},
+            {'internal.redhat': None},
             {'kernel.install_latest_rh_kernel': None}
         ])
  

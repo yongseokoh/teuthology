@@ -12,7 +12,7 @@ import six
 import subprocess
 
 import teuthology.lock.ops
-from teuthology import misc
+from teuthology import misc, contextutil
 from teuthology.packaging import get_builder_project
 from teuthology import report
 from teuthology.config import config as teuth_config
@@ -20,6 +20,7 @@ from teuthology.exceptions import VersionNotFoundError
 from teuthology.job_status import get_status, set_status
 from teuthology.orchestra import cluster, remote, run
 from teuthology.task.internal.redhat import setup_cdn_repo, setup_base_repo, setup_additional_repo, setup_stage_cdn
+
 log = logging.getLogger(__name__)
 
 
@@ -487,3 +488,14 @@ def archive_upload(ctx, config):
                     upload)
         else:
             log.info('Not uploading archives.')
+
+
+@contextlib.contextmanager
+def redhat(ctx, config):
+    with contextutil.nested(
+            lambda: setup_stage_cdn(ctx, config),
+            lambda: setup_cdn_repo(ctx, config),
+            lambda: setup_base_repo(ctx, config),
+            lambda: setup_additional_repo(ctx, config),
+    ):
+        yield
