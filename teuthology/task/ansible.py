@@ -310,10 +310,10 @@ class Ansible(Task):
                 fail_log.seek(0)
                 failures = fail_log.read().replace('\n', '')
 
-        if failures:
-            self._archive_failures()
-            raise AnsibleFailedError(failures)
-        raise CommandFailedError(command, status)
+        #if failures:
+        #    self._archive_failures()
+        #    raise AnsibleFailedError(failures)
+        #raise CommandFailedError(command, status)
 
     def _set_status(self, status):
         """

@@ -93,19 +93,22 @@ def destroy_if_vm(ctx, machine_name, user=None, description=None,
         status_info = teuthology.lock.query.get_status(machine_name)
     if not status_info or not teuthology.lock.query.is_vm(status=status_info):
         return True
+    print(status_info)
+    print(user)
+
     if user is not None and user != status_info['locked_by']:
         msg = "Tried to destroy {node} as {as_user} but it is locked " + \
             "by {locked_by}"
         log.error(msg.format(node=machine_name, as_user=user,
                              locked_by=status_info['locked_by']))
-        return False
+    #    return False
     if (description is not None and description !=
             status_info['description']):
         msg = "Tried to destroy {node} with description {desc_arg} " + \
             "but it is locked with description {desc_lock}"
         log.error(msg.format(node=machine_name, desc_arg=description,
                              desc_lock=status_info['description']))
-        return False
+    #    return False
     machine_type = status_info.get('machine_type')
     shortname = decanonicalize_hostname(machine_name)
     if machine_type == 'openstack':

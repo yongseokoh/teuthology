@@ -250,6 +250,7 @@ class Downburst(object):
             user_info['runcmd'].extend([
                 ['sed', '-ie', 's/HWADDR=".*"/HWADDR="%s"/' % mac_address,
                  '/etc/sysconfig/network-scripts/ifcfg-eth0'],
+                ['yum', 'install', '-y', 'iptables'],
             ])
             user_info['packages'].append('redhat-lsb-core')
         # On Ubuntu, starting with 16.04, and Fedora, starting with 24, we need
@@ -306,17 +307,7 @@ def get_distro_from_downburst():
                      'debian': ['6.0', '7.0', '8.0']}
     executable_cmd = downburst_executable()
     environment_dict = downburst_environment()
-    if not executable_cmd:
-        log.warn("Downburst not found!")
-        log.info('Using default values for supported os_type/os_version')
-        return default_table
-    try:
-        log.debug(executable_cmd)
-        output = subprocess.check_output([executable_cmd, 'list-json'],
-                                                        env=environment_dict)
-        downburst_data = json.loads(output)
-        return downburst_data
-    except (subprocess.CalledProcessError, OSError):
-        log.exception("Error calling downburst!")
-        log.info('Using default values for supported os_type/os_version')
-        return default_table
+    print(executable_cmd)
+    log.warn("Downburst not found!")
+    log.info('Using default values for supported os_type/os_version')
+    return default_table
