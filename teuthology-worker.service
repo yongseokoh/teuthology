@@ -1,0 +1,13 @@
+[Unit]
+Description=teuthology-worker
+
+[Service]
+Type=simple
+PIDFile=/tmp/teuthology-worker.pid
+ExecStartPre=/usr/bin/rm -f /tmp/teuthology-worker.pid
+ExecStart=/root/teuthology/virtualenv/bin/teuthology-worker -v --tube vps --archive-dir /root/.teuthology/www/logs/jobs --log-dir /root/.teuthology/www/logs/workers
+#KillMode=process
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

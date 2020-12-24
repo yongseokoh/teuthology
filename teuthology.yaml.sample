@@ -18,7 +18,8 @@ gitbuilder_host: teuth-repo001-vst-jp2v-dev.lineinfra-dev.com
 archive_server: http://teuth-pm002-vst-jp2p-dev.lineinfra-dev.com:8888
 
 # if you want make and test patches to ceph-cm-ansible
-# ceph_cm_ansible_git_url: /root/ceph-cm-ansible
+ceph_cm_ansible_git_url: https://git.linecorp.com/yongseok-oh/ceph-cm-ansible.git
+
 # customize kvm guests parameter
 downburst:
   path: /root/downburst/virtualenv/bin/downburst
