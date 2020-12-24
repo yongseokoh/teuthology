@@ -27,7 +27,7 @@ DISTRO_CODENAME_MAP = {
 #    },
     "centos": {
         "8": "core",
-#        "7": "core",
+        "7": "core",
 #        "6": "core",
     },
 #    "fedora": {
@@ -61,7 +61,7 @@ DISTRO_CODENAME_MAP = {
 DEFAULT_OS_VERSION = dict(
     ubuntu="18.04",
 #    fedora="25",
-    centos="8.2",
+    centos="7.4",
 #    opensuse="15.0",
 #    sle="15.0",
 #    rhel="8.1",

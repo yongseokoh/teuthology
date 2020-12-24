@@ -33,19 +33,20 @@ def task(ctx, config):
     for rem in ctx.cluster.remotes.keys():
         rem.run(
             args = [
-                'sudo', 'systemctl', 'stop', 'ntp.service', run.Raw('||'),
-                'sudo', 'systemctl', 'stop', 'ntpd.service', run.Raw('||'),
-                'sudo', 'systemctl', 'stop', 'chronyd.service',
+                #'sudo', 'systemctl', 'stop', 'ntp.service', run.Raw('||'),
+                #'sudo', 'systemctl', 'stop', 'ntpd.service', run.Raw('||'),
+                'sudo', 'systemctl', 'stop', 'chronyd.service', #run.Raw('||'),
+                #'sudo', 'systemctl', 'stop', 'ntpd.service',
                 run.Raw(';'),
-                'sudo', 'ntpd', '-gq', run.Raw('||'),
-                'sudo', 'chronyc', 'makestep',
+                #'sudo', 'systemctl', 'start', 'ntp.service', run.Raw('||'),
+                'sudo', 'systemctl', 'start', 'chronyd.service', #run.Raw('||'),
+                #'sudo', 'systemctl', 'start', 'ntpd.service',
                 run.Raw(';'),
-                'sudo', 'systemctl', 'start', 'ntp.service', run.Raw('||'),
-                'sudo', 'systemctl', 'start', 'ntpd.service', run.Raw('||'),
-                'sudo', 'systemctl', 'start', 'chronyd.service',
+                'sudo', 'chronyc', 'makestep', #run.Raw('||'),
+                #'sudo', 'ntpd', '-gq',
                 run.Raw(';'),
-                'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
-                'PATH=/usr/bin:/usr/sbin', 'chronyc', 'sources',
+                'PATH=/usr/bin:/usr/sbin', 'chronyc', 'sources', #run.Raw('||'),
+                #'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p',
                 run.Raw('||'),
                 'true'
             ],
@@ -60,7 +61,7 @@ def task(ctx, config):
         for rem in ctx.cluster.remotes.keys():
             rem.run(
                 args=[
-                    'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
+                    #'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
                     'PATH=/usr/bin:/usr/sbin', 'chronyc', 'sources',
                     run.Raw('||'),
                     'true'
@@ -80,7 +81,7 @@ def check(ctx, config):
     for rem in ctx.cluster.remotes.keys():
         rem.run(
             args=[
-                'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
+                #'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
                 'PATH=/usr/bin:/usr/sbin', 'chronyc', 'sources',
                 run.Raw('||'),
                 'true'
@@ -95,7 +96,7 @@ def check(ctx, config):
         for rem in ctx.cluster.remotes.keys():
             rem.run(
                 args=[
-                    'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
+                    #'PATH=/usr/bin:/usr/sbin', 'ntpq', '-p', run.Raw('||'),
                     'PATH=/usr/bin:/usr/sbin', 'chronyc', 'sources',
                     run.Raw('||'),
                     'true'

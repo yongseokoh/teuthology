@@ -58,11 +58,11 @@ def syslog(ctx, config):
             ctx.cluster.run(
                 args=[
                     'sudo',
-                    'service',
+                    'systemctl',
                     # a mere reload (SIGHUP) doesn't seem to make
                     # rsyslog open the files
-                    'rsyslog',
                     'restart',
+                    'rsyslog.service',
                 ],
                 wait=False,
             ),
@@ -82,9 +82,9 @@ def syslog(ctx, config):
                     CONF,
                     run.Raw('&&'),
                     'sudo',
-                    'service',
-                    'rsyslog',
+                    'systemctl',
                     'restart',
+                    'rsyslog.service',
                 ],
                 wait=False,
             ),

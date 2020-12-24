@@ -237,8 +237,8 @@ def get_initial_tasks(lock, config, machine_type):
         init_tasks.extend([
             {'internal.setup_stage_cdn': None}])
 
-    #if config.get('ceph_cm_ansible', False):
-    #    init_tasks.append({'ansible.cephlab': None})
+    if config.get('ceph_cm_ansible', True):
+        init_tasks.append({'ansible.cephlab': None})
 
     # clock_sync_task: 'clock' or 'clock.check'
     clock_sync_task = config.get('clock_sync_task', 'clock')

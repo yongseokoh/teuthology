@@ -1,0 +1,37 @@
+# replace /root with whatever appropriate to your needs
+# teuthology-lock
+lab_domain: local
+lock_server: http://localhost:80
+default_machine_type: vps
+# teuthology-run
+results_server: http://localhost:80
+# we do not need reserve_machines on localhost
+reserve_machines: 0
+# point to your teuthology
+teuthology_path: /root/teuthology
+# beanstalkd
+queue_host: localhost
+queue_port: 11300
+ceph_cm_ansible: false
+ceph_git_url: https://git.linecorp.com/yongseok-oh/ceph.git
+gitbuilder_host: teuth-repo001-vst-jp2v-dev.lineinfra-dev.com
+archive_server: http://teuth-pm002-vst-jp2p-dev.lineinfra-dev.com:8888
+
+# if you want make and test patches to ceph-cm-ansible
+# ceph_cm_ansible_git_url: /root/ceph-cm-ansible
+# customize kvm guests parameter
+downburst:
+  path: /root/downburst/virtualenv/bin/downburst
+  # define discover_url if you need your custom downburst image server
+  discover_url: http://localhost:8181/images/
+  machine:
+    cpus: 2
+    disk: 12G
+    ram: 2G
+    volumes:
+      size: 8G
+      count: 4
+# add the next two if you do not use shaman
+use_shaman: false
+check_package_signatures: false
+suite_verify_ceph_hash: false
